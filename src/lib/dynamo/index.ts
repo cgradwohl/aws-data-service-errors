@@ -1,4 +1,10 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDBClient,
+  GetItemCommand,
+  PutItemCommand,
+  GetItemCommandOutput,
+  PutItemCommandOutput,
+} from "@aws-sdk/client-dynamodb";
 import {
   DynamoDBDocumentClient,
   GetCommand,
@@ -69,9 +75,9 @@ export class CourierDynamoClientFactory {
 
   public async put<T extends Record<string, NativeAttributeValue> | undefined>(
     args: Omit<PutCommandInput, "Item" | "TableName"> & { Item: T }
-  ): Promise<PutCommandOutput | undefined> {
+  ): Promise<PutItemCommandOutput | undefined> {
     try {
-      const command = new PutCommand({
+      const command = new PutItemCommand({
         ...args,
         TableName: this.tableName,
       });
@@ -92,7 +98,7 @@ export class CourierDynamoClientFactory {
     args: Omit<GetCommandInput, "TableName">
   ): Promise<T | undefined> {
     try {
-      const command = new GetCommand({
+      const command = new GetItemCommand({
         ...args,
         TableName: this.tableName,
       });
